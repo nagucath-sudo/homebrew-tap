@@ -7,14 +7,14 @@ class Cliproxyapi < Formula
   depends_on "go" => :build
   depends_on "python@3.14" => :build
 
-  resource "infra" do
+  resource "infra-9b82d375" do
     url "https://github.com/wignerStan/infra.git",
         revision: "9b82d375d097900094715c226209d940b405eb8e"
   end
 
   def install
     infra_source = buildpath/"build/infra-source"
-    resource("infra").stage infra_source
+    resource("infra-9b82d375").stage infra_source
     ENV["INFRA_GO_DIR"] = (infra_source/"go").to_s
     ENV["CC"] = "/usr/bin/cc" if OS.linux?
     system "bash", "scripts/materialize-cliproxyapi.sh"
