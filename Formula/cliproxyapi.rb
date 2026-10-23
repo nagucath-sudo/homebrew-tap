@@ -9,7 +9,7 @@ class Cliproxyapi < Formula
 
   resource "infra" do
     url "https://github.com/wignerStan/infra.git",
-        revision: "7b1fea6d734616aa3db0c460a3a104b601573c77"
+        revision: "9b82d375d097900094715c226209d940b405eb8e"
   end
 
   def install
