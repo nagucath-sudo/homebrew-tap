@@ -5,8 +5,17 @@ class Cliproxyapi < Formula
   head "https://github.com/wignerStan/cpa-plugin-key-policy.git", branch: "main"
 
   depends_on "go" => :build
+  depends_on "python@3.14" => :build
+
+  resource "infra" do
+    url "https://github.com/wignerStan/infra.git",
+        revision: "7b1fea6d734616aa3db0c460a3a104b601573c77"
+  end
 
   def install
+    infra_source = buildpath/"build/infra-source"
+    resource("infra").stage infra_source
+    ENV["INFRA_GO_DIR"] = (infra_source/"go").to_s
     ENV["CC"] = "/usr/bin/cc" if OS.linux?
     system "bash", "scripts/materialize-cliproxyapi.sh"
     build_root = buildpath / "build" / "cliproxyapi"
@@ -19,7 +28,7 @@ class Cliproxyapi < Formula
 
     Dir.chdir(build_root) do
       system "go", "build", *std_go_args(output: bin / "cliproxyapi", ldflags: ldflags),
-             "./cmd/server/main.go"
+             "./cmd/server"
       etc.install "config.example.yaml" => "cliproxyapi.conf"
     end
   end

@@ -5,12 +5,22 @@ class CpaKeyPolicyCatalog < Formula
   head "https://github.com/wignerStan/cpa-plugin-key-policy.git", branch: "main"
 
   depends_on "go" => :build
+  depends_on "python@3.14" => :build
+
+  resource "infra" do
+    url "https://github.com/wignerStan/infra.git",
+        revision: "7b1fea6d734616aa3db0c460a3a104b601573c77"
+  end
 
   def install
+    infra_source = buildpath/"build/infra-source"
+    resource("infra").stage infra_source
+    ENV["INFRA_GO_DIR"] = (infra_source/"go").to_s
     ENV["CGO_ENABLED"] = "1"
-    ENV["GOFLAGS"] = "-mod=mod"
+    ENV["GOFLAGS"] = "-mod=readonly"
     ENV["CC"] = "/usr/bin/cc"
     ENV["CXX"] = "/usr/bin/c++"
+    system "bash", "scripts/prepare-go-workspace.sh"
     extension = OS.mac? ? "dylib" : "so"
     output = libexec/"cpa-key-policy.#{extension}"
     libexec.mkpath
