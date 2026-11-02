@@ -1,6 +1,6 @@
 # wignerStan Homebrew tap
 
-CLIProxyAPI and its companion key-policy plugin.
+Patched CLIProxyAPI and network packages. The key-policy plugin ships from its own repository releases.
 
 ## Install
 
@@ -12,19 +12,13 @@ not published a versioned host release yet, so install the rolling formula with
 ```sh
 brew tap wignerStan/tap
 brew install --HEAD wignerStan/tap/cliproxyapi
-brew install --HEAD wignerStan/tap/cpa-key-policy-catalog
 ```
 
 The default host configuration is installed at
-`$(brew --prefix)/etc/cliproxyapi.conf`. Set its plugin directory to the path
-printed by:
-
-```sh
-brew --prefix wignerStan/tap/cpa-key-policy-catalog
-```
-
-Append `/libexec` to that path, enable `cpa-key-policy`, and configure its
-`catalog_groups`. See the
+`$(brew --prefix)/etc/cliproxyapi.conf`. The key-policy plugin is distributed
+separately from the [plugin repository releases](https://github.com/wignerStan/cpa-plugin-key-policy/releases).
+Put its platform library in a private plugins directory, set that directory as
+`plugins.dir`, and enable `cpa-key-policy`. See the
 [plugin example](https://github.com/wignerStan/cpa-plugin-key-policy/blob/main/config.example.yaml)
 for the complete shape.
 
@@ -36,11 +30,10 @@ brew services start wignerStan/tap/cliproxyapi
 
 ## Update
 
-Fetch the latest monorepo host and key-policy plugin sources with:
+Fetch the latest patched host with:
 
 ```sh
 brew update
 brew upgrade --fetch-HEAD wignerStan/tap/cliproxyapi
-brew upgrade --fetch-HEAD wignerStan/tap/cpa-key-policy-catalog
 brew services restart wignerStan/tap/cliproxyapi
 ```
