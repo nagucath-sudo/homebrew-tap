@@ -1,0 +1,29 @@
+name: Verify network release packages
+on:
+  push:
+    branches: [release/network-20261102]
+permissions:
+  contents: read
+jobs:
+  sing-box:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    steps:
+      - uses: Homebrew/actions/setup-homebrew@c262868c096d909fc278daa87ed9772967331ea3
+      - name: Install exact tap revision and check sing-box
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: '1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          brew tap wignerstan/tap
+          tap=$(brew --repository wignerstan/tap)
+          git -C "$tap" fetch origin "$GITHUB_SHA"
+          git -C "$tap" checkout --detach "$GITHUB_SHA"
+          brew install wignerstan/tap/sing-box-wigner
+          brew test wignerstan/tap/sing-box-wigner
+          test -s "$(brew --prefix sing-box-wigner)/share/sing-box-wigner/SOURCE_COMMIT"

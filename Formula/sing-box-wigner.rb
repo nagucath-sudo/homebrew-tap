@@ -1,47 +1,32 @@
 class SingBoxWigner < Formula
   desc "Universal proxy platform with native DAE and Tailscale integrations"
   homepage "https://github.com/wignerStan/sing-box"
-  url "https://github.com/wignerStan/sing-box/releases/download/v1.14.2-wigner.1/sing-box-v1.14.2-wigner.1-source.tar.gz"
-  version "1.14.2-wigner.1"
-  sha256 "a15cff7943a792eb88210e0cdf0762fb13d0e2870426c11c1a8e0ca5c98344b9"
+  version "1.15.0-dev.20261102-wigner.1"
   license "GPL-3.0-or-later"
   version_scheme 1
 
-  depends_on "go" => :build
+  on_macos do
+    depends_on arch: :arm64
+    url "https://github.com/wignerStan/sing-box/releases/download/v1.15.0-dev.20261102-wigner.1/sing-box-v1.15.0-dev.20261102-wigner.1-darwin-arm64.tar.gz"
+    sha256 "173722f1d3ff8613611b133a3541191f20a8a0187a6cced29604d8eec07c8f3d"
+  end
+
+  on_linux do
+    depends_on arch: :x86_64
+    url "https://github.com/wignerStan/sing-box/releases/download/v1.15.0-dev.20261102-wigner.1/sing-box-v1.15.0-dev.20261102-wigner.1-linux-amd64.tar.gz"
+    sha256 "8362ff6c32e095251ba25fd3c99a41f0c23f2ab5c7894423db2a7725d7bcfe3b"
+  end
 
   conflicts_with "sing-box", because: "both install a sing-box executable"
 
   def install
-    ENV["CGO_ENABLED"] = "0"
-    ENV["GOPROXY"] = "off"
-    ENV["GOSUMDB"] = "off"
-    ENV["GOTOOLCHAIN"] = "local"
-
-    tags = %w[
-      with_dae
-      with_gvisor
-      with_quic
-      with_wireguard
-      with_utls
-      with_clash_api
-      with_tailscale
-    ]
-    ldflags = "-s -w -X github.com/sagernet/sing-box/constant.Version=#{version}"
-
-    system "go", "build",
-           "-mod=vendor",
-           "-trimpath",
-           "-buildvcs=false",
-           "-tags", tags.join(","),
-           "-ldflags", ldflags,
-           "-o", bin/"sing-box",
-           "./cmd/sing-box"
+    bin.install "sing-box"
+    pkgshare.install "SOURCE_COMMIT", "VENDOR_LOCK.json", "SHA256SUMS"
     generate_completions_from_executable(bin/"sing-box", shell_parameter_format: :cobra)
   end
 
   test do
     assert_match version.to_s, shell_output("#{bin}/sing-box version")
-
     (testpath/"config.json").write <<~JSON
       {"inbounds":[{"type":"mixed","listen":"127.0.0.1","listen_port":1080}]}
     JSON
