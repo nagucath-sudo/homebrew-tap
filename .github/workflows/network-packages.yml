@@ -20,10 +20,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          brew tap wignerstan/tap
-          tap=$(brew --repository wignerstan/tap)
+          brew tap bmfv4smm7g-hash/tap
+          tap=$(brew --repository bmfv4smm7g-hash/tap)
           git -C "$tap" fetch origin "$GITHUB_SHA"
           git -C "$tap" checkout --detach "$GITHUB_SHA"
-          brew install wignerstan/tap/sing-box-wigner
-          brew test wignerstan/tap/sing-box-wigner
+          brew install bmfv4smm7g-hash/tap/sing-box-wigner
+          brew test bmfv4smm7g-hash/tap/sing-box-wigner
           test -s "$(brew --prefix sing-box-wigner)/share/sing-box-wigner/SOURCE_COMMIT"

@@ -1,8 +1,8 @@
 class Cliproxyapi < Formula
   desc "CLIProxyAPI built with the cpa-key-policy integration patches"
-  homepage "https://github.com/wignerStan/cpa-plugin-key-policy"
+  homepage "https://github.com/bmfv4smm7g-hash/cpa-plugin-key-policy"
   license "MIT"
-  head "https://github.com/wignerStan/cpa-plugin-key-policy.git", branch: "main"
+  head "https://github.com/bmfv4smm7g-hash/cpa-plugin-key-policy.git", branch: "main"
 
   depends_on "go" => :build
   depends_on "python@3.14" => :build
@@ -21,7 +21,7 @@ class Cliproxyapi < Formula
     build_root = buildpath / "build" / "cliproxyapi"
     ldflags = %W[
       -X main.Version=#{version}
-      -X main.Commit=wignerstan/cpa-plugin-key-policy
+      -X main.Commit=bmfv4smm7g-hash/cpa-plugin-key-policy
       -X main.BuildDate=#{time.iso8601}
       -X main.DefaultConfigPath=#{etc / "cliproxyapi.conf"}
     ]
