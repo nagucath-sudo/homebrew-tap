@@ -7,13 +7,13 @@ class TailscaleWigner < Formula
   on_macos do
     depends_on arch: :arm64
     url "https://github.com/nagucath-sudo/tailscale/releases/download/v1.104.4-wigner.1/tailscale-v1.104.4-wigner.1-darwin-arm64.tar.gz"
-    sha256 "b08cb8d3ed62563e9030177d7c0f47917a01e73e69b130a1fe086fba31199839"
+    sha256 "6c907945fe2e0d8bcce76cafa55676d3d5fa0d8d41efb22b506aeccd3478f6d9"
   end
 
   on_linux do
     depends_on arch: :x86_64
     url "https://github.com/nagucath-sudo/tailscale/releases/download/v1.104.4-wigner.1/tailscale-v1.104.4-wigner.1-linux-amd64.tar.gz"
-    sha256 "d6b68e300d2f8aad13a6bcfabb2580af9ee5dcbf9c4fbda14049c7491a463153"
+    sha256 "1bcf61fbac4b00d36c4b3293e2d0770b9289fea796023853b61fb48c0dc2ab7b"
   end
 
   conflicts_with "tailscale", because: "both install the tailscale command"
